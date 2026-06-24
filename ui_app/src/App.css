@@ -1,0 +1,98 @@
+* { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { margin: 0; background-color: #f7f7f8; color: #333; }
+
+.chat-container, .admin-container { 
+  max-width: 800px; 
+  margin: 20px auto; 
+  background: white; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+  display: flex; 
+  flex-direction: column; 
+  height: 90vh; 
+  overflow: hidden; 
+}
+
+.admin-container { 
+  height: auto; 
+  padding: 30px; 
+}
+
+.chat-header { 
+  padding: 15px 20px; 
+  border-bottom: 1px solid #eee; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
+
+.chat-header h2 { margin: 0; font-size: 1.2rem; }
+.admin-link { text-decoration: none; color: #007bff; font-size: 0.9rem; }
+
+.messages-area { 
+  flex: 1; 
+  padding: 20px; 
+  overflow-y: auto; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 15px; 
+}
+
+.message-bubble { 
+  max-width: 80%; 
+  padding: 12px 16px; 
+  border-radius: 12px; 
+  line-height: 1.5; 
+  white-space: pre-wrap; 
+}
+
+.message-bubble.user { 
+  align-self: flex-end; 
+  background-color: #007bff; 
+  color: white; 
+  border-bottom-right-radius: 2px; 
+}
+
+.message-bubble.ai { 
+  align-self: flex-start; 
+  background-color: #f1f3f4; 
+  color: black; 
+  border-bottom-left-radius: 2px; 
+}
+
+.typing { font-style: italic; color: #666; }
+
+.input-area { 
+  padding: 15px; 
+  border-top: 1px solid #eee; 
+  display: flex; 
+  gap: 10px; 
+}
+
+.input-area input { 
+  flex: 1; 
+  padding: 12px; 
+  border: 1px solid #ddd; 
+  border-radius: 8px; 
+  outline: none; 
+}
+
+.input-area input:focus { border-color: #007bff; }
+
+.input-area button { 
+  background: #007bff; 
+  color: white; 
+  border: none; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  padding: 0 15px;
+}
+
+/* Admin Styles */
+.admin-card { margin-top: 20px; padding: 20px; border: 1px solid #eee; border-radius: 8px; }
+.admin-card button { margin-top: 10px; padding: 10px 15px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; }
+.rebuild-btn { background: #dc3545 !important; }
+.back-link { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #555; }
+.status-msg { margin-top: 20px; color: #28a745; font-weight: bold; }
