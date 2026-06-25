@@ -21,20 +21,20 @@ def build_vector_database(force_rebuild=False):
         print(" INITIALIZING RAG SYSTEM")
         print("="*50)
         
-        # Step 1: Load Embedding Model
-        print("\n  Step 1/5: Loading Embedding Model...")
-        print(f"   Model: {Config.EMBEDDING_MODEL}")
-        print("    This may take 1-3 minutes on first run...")
         
-        # ✅ FIXED: token ko model_kwargs mein pass kiya
+        logger.info("\n  Step 1/5: Loading Embedding Model...")
+        logger.info(f"   Model: {Config.EMBEDDING_MODEL}")
+        logger.info("    This may take 1-3 minutes on first run...")
+        
+    
         embed_model = HuggingFaceEmbedding(
         model_name=Config.EMBEDDING_MODEL,
         model_kwargs={"token": Config.HF_TOKEN}
         )
         print("    Embedding model loaded!")
         
-        # Step 2: Initialize LLM
-        print("\n🤖 Step 2/5: Connecting to LLM...")
+        
+        print("\n Step 2/5: Connecting to LLM...")
         llm = OpenRouter(
             model=Config.LLM_MODEL,
             api_key=Config.OPENROUTER_API_KEY,
@@ -44,7 +44,7 @@ def build_vector_database(force_rebuild=False):
         Settings.embed_model = embed_model
         print("    LLM connected!")
         
-        # Step 3: Load Documents
+        
         print("\n Step 3/5: Loading documents...")
         raw_documents = load_and_clean_data(Config.CSV_PATH)
         
@@ -53,7 +53,7 @@ def build_vector_database(force_rebuild=False):
         nodes = splitter.get_nodes_from_documents(raw_documents, show_progress=True)
         print(f"    Created {len(nodes)} chunks")
         
-        # Step 4: Build/Load Vector DB
+        
         print("\n Step 4/5: Setting up Vector Database...")
         
         db_exists = os.path.exists(Config.CHROMA_DB_PATH) and len(os.listdir(Config.CHROMA_DB_PATH)) > 0

@@ -11,16 +11,15 @@ from Reterival_engine import create_chat_engine
 
 app = FastAPI()
 
-# React frontend ko allow karne ke liye CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Production mein "*" ki jagah apni domain daalo
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Global variables to keep system loaded in RAM
+
 index = None
 nodes = None
 chat_engine = None
@@ -44,10 +43,10 @@ def get_metadata():
 @app.on_event("startup")
 def startup_event():
     global index, nodes, chat_engine
-    print("🚀 Loading RAG System into Memory...")
+    print(" Loading RAG System into Memory...")
     index, nodes = build_vector_database(force_rebuild=False)
     chat_engine = create_chat_engine(index, nodes)
-    print("✅ System Ready for API Calls!")
+    print(" System Ready for API Calls!")
 
 @app.post("/chat")
 async def chat_endpoint(message: str = Form(...), session_id: str = Form("default")):
@@ -60,7 +59,7 @@ async def chat_endpoint(message: str = Form(...), session_id: str = Form("defaul
 @app.post("/admin/upload")
 async def upload_csv(file: UploadFile = File(...)):
     try:
-        # Uploads folder banao agar nahi hai
+        
         upload_dir = "./Data_cleaning"
         os.makedirs(upload_dir, exist_ok=True)
         
@@ -68,7 +67,7 @@ async def upload_csv(file: UploadFile = File(...)):
         with open(file_location, "wb+") as file_object:
             shutil.copyfileobj(file.file, file_object)
             
-        # ✅ FIX 1: YEH LINE MISSING THI (File ka record save karo)
+        
         save_metadata(file.filename)
             
         return {"status": "success", "message": "CSV uploaded successfully. Rebuilding DB..."}
@@ -85,7 +84,6 @@ async def rebuild_database():
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-# ✅ FIX 2: YEH POORA ENDPOINT MISSING THA (React ko status dikhane ke liye)
 @app.get("/admin/status")
 async def check_status():
     return get_metadata()

@@ -9,7 +9,7 @@ from logger import logger
 def generate_doc_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
-
+csv_path=Config.CSV_PATH
 def load_and_clean_data(csv_path: str) -> list:
     logger.info(f"Loading data from: {csv_path}")
     print(f" Loading CSV: {csv_path}")
@@ -46,7 +46,7 @@ def load_and_clean_data(csv_path: str) -> list:
     print(f" Columns - Brand: {company_col}, Product: {product_col}, Price: {price_col}")
     
     documents = []
-    seen_texts = set()  # ✅ Deduplication
+    seen_texts = set()  
 
     for idx, row in df.iterrows():
         brand = str(row.get(company_col, "Unknown")).strip()
@@ -54,14 +54,14 @@ def load_and_clean_data(csv_path: str) -> list:
         cpu = str(row.get(cpu_col, "Unknown")).strip()
         ram = row.get(ram_col, "N/A")
         
-        # ✅ FIXED: Price ko round karo
+        
         raw_price = row.get(price_col, 0)
         try:
-            price = round(float(raw_price), 2)  # ✅ Round to 2 decimals
+            price = round(float(raw_price), 2)  
         except:
             price = 0.0
         
-        # ✅ Clean RAM value
+        
         try:
             ram_clean = str(int(float(str(ram).replace('GB', '').strip())))
         except:
@@ -69,7 +69,7 @@ def load_and_clean_data(csv_path: str) -> list:
         
         text = f"Brand: {brand}. Model: {product}. CPU: {cpu}. RAM: {ram_clean}GB. Price: ${price}"
 
-        # ✅ Skip duplicates
+        
         if text in seen_texts:
             continue
         seen_texts.add(text)
@@ -81,7 +81,7 @@ def load_and_clean_data(csv_path: str) -> list:
             doc_id=doc_id,
             metadata={
                 "brand": brand,
-                "product": product,  # ✅ Add product for better tracking
+                "product": product,  
                 "price": price,
             },
         )

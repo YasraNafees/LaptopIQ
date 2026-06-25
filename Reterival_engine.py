@@ -65,7 +65,7 @@ Task: Identify the EXACT laptop the user is referring to.
 
             try:
                 resolved_query = str(self._llm.complete(rewrite_prompt)).strip()
-                #print(f"    Memory Recall: '{query_str}' -> '{resolved_query}'")
+                logger.info(f"    Memory Recall: '{query_str}' -> '{resolved_query}'")
             except Exception as e:
                 logger.warning(f"Query rewrite failed: {e}")
 

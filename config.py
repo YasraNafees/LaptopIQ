@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    # ✅ Consistent naming - sab uppercase
+    
     OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
     OPENROUTER_API_URL = os.getenv("OPENROUTER_API_BASE_URL")
-    COHERE_API_KEY = os.getenv("COHERE_API_KEY")  # ✅ Fixed case
+    COHERE_API_KEY = os.getenv("COHERE_API_KEY")  
     HF_TOKEN = os.getenv("HF_TOKEN")
     
-    # Validation
+    
     if not OPENROUTER_API_KEY:
         raise ValueError("OPENROUTER_API_KEY not set!")
     if not OPENROUTER_API_URL:
