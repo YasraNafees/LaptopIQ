@@ -1,7 +1,7 @@
-# LaptopIQ — AI-Powered Laptop Sales Assistant
+# LaptopIQ — AI Powered Laptop Sales Assistant
 
 An intelligent sales assistant built on RAG (Retrieval-Augmented Generation).
-Answers customer questions strictly from your uploaded laptop inventory —
+Answers customer questions strictly from your uploaded laptop inventory 
 no hallucinations, no invented specs or prices.
 
 ---
