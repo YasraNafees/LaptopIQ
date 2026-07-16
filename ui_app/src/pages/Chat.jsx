@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { Send } from 'lucide-react';
 
+import logger from '../utils/logger';
+
 const Chat = () => {
   const [messages, setMessages] = useState([
     { role: 'ai', text: "Hello! I'm your Laptop Assistant. How can I help you today?" }
@@ -23,13 +25,22 @@ const Chat = () => {
     setInput('');
     setLoading(true);
 
+    // User message ko console mein log karna
+    logger.info(`User sent message: "${userMsg}"`, "Chat");
+
     try {
       const formData = new FormData();
       formData.append('message', userMsg);
 
       const res = await axios.post('http://localhost:8000/chat', formData);
+      
+      // Successful response log karna
+      logger.info("Successfully received response from backend.", "Chat");
       setMessages(prev => [...prev, { role: 'ai', text: res.data.response }]);
+      
     } catch (error) {
+      
+      logger.error("Failed to connect to backend or get response.", "Chat");
       setMessages(prev => [...prev, { role: 'ai', text: "Error connecting to server." }]);
     } finally {
       setLoading(false);

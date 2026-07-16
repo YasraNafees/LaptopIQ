@@ -3,21 +3,24 @@ import hashlib
 import pandas as pd
 from llama_index.core import Document
 from config import Config
-from logger import logger
+from logger import get_logger
+
+
+logger = get_logger(__name__)
 
 
 def generate_doc_hash(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 csv_path=Config.CSV_PATH
+
 def load_and_clean_data(csv_path: str) -> list:
     logger.info(f"Loading data from: {csv_path}")
-    print(f" Loading CSV: {csv_path}")
     
     df = pd.read_csv(csv_path).drop_duplicates()
-    print(f" Found {len(df)} rows in CSV")
+    logger.info(f"Found {len(df)} rows in CSV")
     
-    # Column detection
+    
     company_col = next(
         (c for c in df.columns if "brand" in c.lower() or "company" in c.lower()),
         df.columns[0] if len(df.columns) > 0 else None
@@ -43,7 +46,7 @@ def load_and_clean_data(csv_path: str) -> list:
         None
     )
     
-    print(f" Columns - Brand: {company_col}, Product: {product_col}, Price: {price_col}")
+    logger.info(f"Columns detected - Brand: {company_col}, Product: {product_col}, Price: {price_col}")
     
     documents = []
     seen_texts = set()  
@@ -88,7 +91,7 @@ def load_and_clean_data(csv_path: str) -> list:
 
         documents.append(doc)
 
-    print(f"Created {len(documents)} unique documents")
+    logger.info(f"Created {len(documents)} unique documents")
     return documents
 
 
@@ -96,12 +99,11 @@ def main():
     try:
         logger.info("Starting Ingestion Process")
         documents = load_and_clean_data(Config.CSV_PATH)
-        logger.info(f"Documents Created: {len(documents)}")
-        print(f"Ingestion complete: {len(documents)} documents")
+        logger.info(f"Ingestion complete: {len(documents)} documents")
 
     except Exception as e:
+        
         logger.error(f"Error during ingestion: {e}", exc_info=True)
-        print(f" Error: {e}")
         sys.exit(1)
 
 

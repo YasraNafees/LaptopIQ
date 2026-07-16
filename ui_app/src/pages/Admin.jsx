@@ -2,61 +2,74 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Upload, Clock, WifiOff } from 'lucide-react';
 
+import logger from '../utils/logger'; 
+
 const Admin = () => {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   
-  // ✅ FIX: State mein sirf PLAIN TEXT rakhenge, koi JSX nahi
   const [metadata, setMetadata] = useState({ 
     last_updated: "Checking status...", 
     filename: "Checking status..." 
   });
   
-  // ✅ FIX: Connection error track karne ke liye alag boolean state
   const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
+    logger.info("Checking backend status on component load...", "Admin");
+    
     axios.get('http://localhost:8000/admin/status')
       .then(res => {
         setMetadata(res.data);
-        setIsOffline(false); // Connected
+        setIsOffline(false);
+        logger.info("Successfully connected to backend.", "Admin");
       })
-      .catch(() => {
+      .catch((err) => {
         setMetadata({ 
           last_updated: "Connection Error", 
           filename: "Backend Disconnected" 
         });
-        setIsOffline(true); // Disconnected
+        setIsOffline(true);
+        logger.error("Failed to connect to backend. Is the Python server running?", "Admin");
       });
   }, []);
 
   const handleUploadAndProcess = async () => {
     if (!file) return alert("Please select a CSV file first.");
+    
     setLoading(true);
-    setStatus("⏳ Uploading CSV file...");
+    setStatus("Uploading CSV file...");
+    logger.info("Starting CSV upload process...", "Admin");
 
     try {
       const formData = new FormData();
       formData.append('file', file);
+      
       const uploadRes = await axios.post('http://localhost:8000/admin/upload', formData);
       
       if (uploadRes.data.status === "success") {
-        setStatus("✅ File uploaded! ⏳ Rebuilding Vector Database... (Takes 1-2 mins)");
+        setStatus("File uploaded. Rebuilding Vector Database... (Takes 1-2 mins)");
+        logger.info("CSV uploaded successfully. Triggering database rebuild...", "Admin");
+        
         const rebuildRes = await axios.post('http://localhost:8000/admin/rebuild');
         
         if (rebuildRes.data.status === "success") {
-          setStatus("🎉 Success! System updated successfully.");
+          setStatus("Success! System updated successfully.");
+          logger.info("Vector database rebuilt successfully.", "Admin");
+          
           const newStatus = await axios.get('http://localhost:8000/admin/status');
           setMetadata(newStatus.data);
           setIsOffline(false);
         } else {
-          setStatus("❌ Rebuild failed: " + rebuildRes.data.message);
+          setStatus("Rebuild failed: " + rebuildRes.data.message);
+          logger.error("Database rebuild failed: " + rebuildRes.data.message, "Admin");
         }
       }
     } catch (error) {
-      setStatus("❌ Connection error. Is the backend running?");
+      setStatus("Connection error. Is the backend running?");
       setIsOffline(true);
+      logger.error("Network error during upload or rebuild process.", "Admin");
     } finally {
       setLoading(false);
       setFile(null);
@@ -66,9 +79,8 @@ const Admin = () => {
   return (
     <div className="admin-container">
       <h2>Admin Data Management</h2>
-      <a href="/" className="back-link">← Back to Chat</a>
+      <a href="/" className="back-link">Back to Chat</a>
       
-      {/* ✅ FIX: Icon ko conditionally JSX mein render karo, state mein nahi */}
       <div className="admin-card" style={{background: "#f8f9fa", borderLeft: isOffline ? "4px solid #dc3545" : "4px solid #007bff"}}>
         <h3 style={{margin: "0 0 10px 0"}}>
           <Clock size={18} /> Current Database Status 

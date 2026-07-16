@@ -5,9 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import shutil
 
-# Apne purane modules import karo
+
 from creating_vectordatabase import build_vector_database
 from Reterival_engine import create_chat_engine
+from logger import get_logger  
+
+
+logger = get_logger(__name__)
 
 app = FastAPI()
 
@@ -43,22 +47,27 @@ def get_metadata():
 @app.on_event("startup")
 def startup_event():
     global index, nodes, chat_engine
-    print(" Loading RAG System into Memory...")
+    logger.info("Loading RAG System into Memory...")
     index, nodes = build_vector_database(force_rebuild=False)
     chat_engine = create_chat_engine(index, nodes)
-    print(" System Ready for API Calls!")
+    logger.info("System Ready for API Calls!")
 
 @app.post("/chat")
 async def chat_endpoint(message: str = Form(...), session_id: str = Form("default")):
     try:
+        
+        logger.debug(f"Chat request | Session: {session_id} | Message: {message}")
         response = chat_engine.chat(message)
         return {"status": "success", "response": str(response)}
     except Exception as e:
+        
+        logger.error(f"Chat endpoint failed: {e}", exc_info=True)
         return {"status": "error", "response": str(e)}
 
 @app.post("/admin/upload")
 async def upload_csv(file: UploadFile = File(...)):
     try:
+        logger.info(f"Received new CSV upload: {file.filename}")
         
         upload_dir = "./Data_cleaning"
         os.makedirs(upload_dir, exist_ok=True)
@@ -67,21 +76,26 @@ async def upload_csv(file: UploadFile = File(...)):
         with open(file_location, "wb+") as file_object:
             shutil.copyfileobj(file.file, file_object)
             
-        
         save_metadata(file.filename)
+        logger.info("CSV uploaded and metadata saved successfully.")
             
         return {"status": "success", "message": "CSV uploaded successfully. Rebuilding DB..."}
     except Exception as e:
+        logger.error(f"CSV Upload failed: {e}", exc_info=True)
         return {"status": "error", "message": str(e)}
 
 @app.post("/admin/rebuild")
 async def rebuild_database():
     global index, nodes, chat_engine
     try:
+
+        logger.warning("Database rebuild triggered via Admin API.")
         index, nodes = build_vector_database(force_rebuild=True)
         chat_engine = create_chat_engine(index, nodes)
+        logger.info("Database rebuilt and Chat Engine updated successfully.")
         return {"status": "success", "message": "Database rebuilt successfully!"}
     except Exception as e:
+        logger.error(f"Database rebuild failed: {e}", exc_info=True)
         return {"status": "error", "message": str(e)}
 
 @app.get("/admin/status")
