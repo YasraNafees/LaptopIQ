@@ -1,7 +1,7 @@
-# LaptopIQ — AI-Powered Laptop Sales Assistant
+# LaptopIQ — AI Powered Laptop Sales Assistant
 
 An intelligent sales assistant built on RAG (Retrieval-Augmented Generation).
-Answers customer questions strictly from your uploaded laptop inventory —
+Answers customer questions strictly from your uploaded laptop inventory 
 no hallucinations, no invented specs or prices.
 
 ---
@@ -250,6 +250,5 @@ Never run in production.
 - `chroma_db/`, `venv/`, `upload_metadata.json`, `app.log` are
   auto-generated — never commit them
 - `.env` has your API keys — never commit it
-- Embeddings are **not free**. First run (and any run after a CSV change)
-  incurs real OpenAI API cost via `text-embedding-3-small`. Every run after
-  that is fast and free until the CSV changes again.
+- First run is slow (embedding generation). Every run after is fast
+  unless CSV changes.
