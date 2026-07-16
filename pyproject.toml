@@ -1,2 +1,8 @@
+[project]
+name = "laptop-iq"
+version = "0.1.0"
+
+# baqi existing settings...
+
 [tool.vercel]
 entrypoint = "api:app"
