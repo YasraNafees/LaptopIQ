@@ -7,14 +7,14 @@ from llama_index.core import Settings, VectorStoreIndex
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core import StorageContext
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.embeddings.openai import OpenAIEmbedding
 
 from data_ingestion import load_and_clean_data
 from config import Config
 from logger import logger
 
 
-def build_vector_database(force_rebuild=False):
+def build_vector_database(force_rebuild=True):
     
     try:
         print("\n" + "="*50)
@@ -27,10 +27,16 @@ def build_vector_database(force_rebuild=False):
         logger.info("    This may take 1-3 minutes on first run...")
         
     
-        embed_model = HuggingFaceEmbedding(
-        model_name=Config.EMBEDDING_MODEL,
-        model_kwargs={"token": Config.HF_TOKEN}
-        )
+        
+        embed_model = OpenAIEmbedding(
+    model=Config.EMBEDDING_MODEL,
+    api_key=Config.OPENROUTER_API_KEY,
+    api_base=Config.OPENROUTER_API_URL,
+)
+        print("    Embedding model loaded!")
+        
+        
+
         print("    Embedding model loaded!")
         
         

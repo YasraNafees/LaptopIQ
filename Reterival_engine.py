@@ -100,7 +100,22 @@ def create_chat_engine(index_obj, nodes_list):
             index=index_obj,
             vector_store_info=vector_store_info,
             similarity_top_k=15,
-        )
+            prompt_template_str="""
+You are a metadata filter generator.
+
+Rules:
+- price is a float number.
+- Never put quotes around numbers.
+- Correct:
+  price < 500
+
+- Wrong:
+  price < "500"
+
+Convert all budget values into numbers.
+"""
+ )
+        
     except Exception as e:
         auto_retriever = index_obj.as_retriever(similarity_top_k=15)
 

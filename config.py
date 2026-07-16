@@ -8,7 +8,7 @@ class Config:
     OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
     OPENROUTER_API_URL = os.getenv("OPENROUTER_API_BASE_URL")
     COHERE_API_KEY = os.getenv("COHERE_API_KEY")  
-    HF_TOKEN = os.getenv("HF_TOKEN")
+    
     
     
     if not OPENROUTER_API_KEY:
@@ -17,11 +17,9 @@ class Config:
         raise ValueError("OPENROUTER_API_URL not set!")
     if not COHERE_API_KEY:
         raise ValueError("COHERE_API_KEY not set!")
-    if not HF_TOKEN:
-        raise ValueError("HF_TOKEN not set!")
     
     # Models
-    EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+    EMBEDDING_MODEL = "text-embedding-3-small"
     LLM_MODEL = "google/gemini-2.5-flash-lite"
     COHERE_MODEL = "rerank-v3.5"
     
