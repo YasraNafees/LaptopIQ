@@ -8,7 +8,6 @@ anyio==4.14.2
 attrs==26.1.0
 banks==2.4.5
 bcrypt==5.0.0
-build==1.5.0
 certifi==2026.6.17
 charset-normalizer==3.4.9
 chromadb==1.5.9
@@ -31,8 +30,6 @@ fsspec==2026.6.0
 googleapis-common-protos==1.75.0
 greenlet==3.5.3
 griffe==2.1.0
-griffecli==2.1.0
-griffelib==2.1.0
 grpcio==1.82.1
 h11==0.16.0
 hf-xet==1.5.2
@@ -47,7 +44,6 @@ jiter==0.16.0
 joblib==1.5.3
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
-kubernetes==36.0.3
 llama-index==0.14.23
 llama-index-core==0.14.23
 llama-index-embeddings-openai==0.6.0
@@ -92,8 +88,6 @@ pydantic-settings==2.14.2
 pydantic_core==2.41.5
 Pygments==2.20.0
 PyPika==0.51.1
-pyproject_hooks==1.2.0
-PyStemmer @ file:///D:/bld/bld/rattler-build_pystemmer_1779478487/work
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 PyYAML==6.0.3
@@ -115,7 +109,6 @@ tinytag==2.2.1
 tokenizers==0.23.1
 tqdm==4.68.4
 typer==0.27.0
-types-requests==2.33.0.20260712
 typing-inspect==0.9.0
 typing-inspection==0.4.2
 typing_extensions==4.16.0
