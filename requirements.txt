@@ -1,29 +1,29 @@
-fastapi==0.116.1
-uvicorn[standard]==0.35.0
-python-dotenv==1.1.1
+fastapi==0.136.3
+uvicorn[standard]
+python-multipart
+python-dotenv
+pydantic==2.12.5
 
-llama-index==0.14.22
+# LlamaIndex Core & Extensions
 llama-index-core==0.14.22
+llama-index==0.14.22
+llama-index-instrumentation==0.5.0
+llama-index-workflows==2.20.0
 
-llama-index-llms-google-genai==0.9.5
-llama-index-embeddings-google-genai==0.5.1
-
-llama-index-vector-stores-chroma==0.5.5
-chromadb==1.0.20
-
-google-generativeai==0.8.5
-
-sentence-transformers==5.1.0
-transformers==4.55.4
-torch==2.8.0
-
-pymupdf==1.26.4
-
-supabase==2.18.1
-psycopg2-binary==2.9.10
-
-tiktoken==0.11.0
-cohere==5.18.0
-httpx==0.28.1
+# Retrieval & Reranking
 llama-index-retrievers-bm25==0.7.1
-PyStemmer==2.2.0.3
+llama-index-postprocessor-cohere-rerank==0.9.0
+cohere
+
+# Database & Vectors
+chromadb==1.5.9
+llama-index-vector-stores-chroma==0.5.5
+
+# LLM Providers & Embeddings
+llama-index-llms-openrouter==0.5.0
+llama-index-embeddings-openai==0.6.0
+openai==2.41.0
+
+# Data Manipulation
+pandas==3.0.3
+numpy==2.4.6

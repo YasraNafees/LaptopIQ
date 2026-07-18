@@ -1,9 +1,9 @@
 .env
-\venv
+\myenv
 .vscode
 __pycache__
 app.log
-Data_cleaning/
+
 upload_metadata.json
 chroma_db/
 node_modules/
