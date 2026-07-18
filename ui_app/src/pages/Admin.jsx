@@ -4,6 +4,8 @@ import { Upload, Clock, WifiOff } from 'lucide-react';
 
 import logger from '../utils/logger'; 
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 const Admin = () => {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('');
@@ -19,7 +21,7 @@ const Admin = () => {
   useEffect(() => {
     logger.info("Checking backend status on component load...", "Admin");
     
-    axios.get('http://localhost:8000/admin/status')
+    axios.get(`${API_URL}/admin/status`)
       .then(res => {
         setMetadata(res.data);
         setIsOffline(false);
@@ -46,19 +48,19 @@ const Admin = () => {
       const formData = new FormData();
       formData.append('file', file);
       
-      const uploadRes = await axios.post('http://localhost:8000/admin/upload', formData);
+      const uploadRes = await axios.post(`${API_URL}/admin/upload`, formData);
       
       if (uploadRes.data.status === "success") {
         setStatus("File uploaded. Rebuilding Vector Database... (Takes 1-2 mins)");
         logger.info("CSV uploaded successfully. Triggering database rebuild...", "Admin");
         
-        const rebuildRes = await axios.post('http://localhost:8000/admin/rebuild');
+        const rebuildRes = await axios.post(`${API_URL}/admin/rebuild`);
         
         if (rebuildRes.data.status === "success") {
           setStatus("Success! System updated successfully.");
           logger.info("Vector database rebuilt successfully.", "Admin");
           
-          const newStatus = await axios.get('http://localhost:8000/admin/status');
+          const newStatus = await axios.get(`${API_URL}/admin/status`);
           setMetadata(newStatus.data);
           setIsOffline(false);
         } else {

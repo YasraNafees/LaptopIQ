@@ -4,6 +4,8 @@ import { Send } from 'lucide-react';
 
 import logger from '../utils/logger';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 const Chat = () => {
   const [messages, setMessages] = useState([
     { role: 'ai', text: "Hello! I'm your Laptop Assistant. How can I help you today?" }
@@ -25,16 +27,16 @@ const Chat = () => {
     setInput('');
     setLoading(true);
 
-    // User message ko console mein log karna
+    
     logger.info(`User sent message: "${userMsg}"`, "Chat");
 
     try {
       const formData = new FormData();
       formData.append('message', userMsg);
 
-      const res = await axios.post('http://localhost:8000/chat', formData);
+      const res = await axios.post(`${API_URL}/chat`, formData);
       
-      // Successful response log karna
+      
       logger.info("Successfully received response from backend.", "Chat");
       setMessages(prev => [...prev, { role: 'ai', text: res.data.response }]);
       
